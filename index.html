@@ -140,8 +140,26 @@
     .conduit-right { right: 8px; }
 
     /* ==========================================================================
-       CABEÇALHO OFICIAL DO GOVERNO
+       EMBLEMA E CABEÇALHO OFICIAL DO GOVERNO
        ========================================================================== */
+    .emblem-wrapper {
+      text-align: center;
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .gov-emblem-img {
+      width: 150px;
+      height: auto;
+      /* Garante pixels afiados da Pixel Art sem desfoque */
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      filter: 
+        drop-shadow(0 0 15px var(--holo-gold-glow)) 
+        drop-shadow(0 0 25px var(--spirit-magenta-glow));
+      animation: emblemPulse 5s ease-in-out infinite alternate;
+    }
+
     .gov-badge {
       display: flex;
       align-items: center;
@@ -154,13 +172,6 @@
       color: var(--holo-gold);
       text-transform: uppercase;
       text-shadow: 0 0 8px var(--holo-gold-glow);
-    }
-
-    .gov-badge-icon {
-      width: 24px;
-      height: 24px;
-      fill: var(--holo-gold);
-      filter: drop-shadow(0 0 5px var(--holo-gold));
     }
 
     .main-header {
@@ -296,7 +307,6 @@
       font-size: 1.15rem;
     }
 
-    /* Estilização de Termos em Destaque no Texto */
     strong {
       color: #ffffff;
       text-shadow: 0 0 8px var(--holo-cyan-glow);
@@ -331,8 +341,19 @@
     }
 
     /* ==========================================================================
-       ANIMAÇÕES HOLOGRÁFICAS
+       ANIMAÇÕES
        ========================================================================== */
+    @keyframes emblemPulse {
+      0% {
+        transform: translateY(0) scale(1);
+        filter: drop-shadow(0 0 12px var(--holo-gold-glow)) drop-shadow(0 0 20px rgba(255, 0, 85, 0.3));
+      }
+      100% {
+        transform: translateY(-6px) scale(1.03);
+        filter: drop-shadow(0 0 25px var(--holo-gold)) drop-shadow(0 0 35px var(--spirit-magenta-glow));
+      }
+    }
+
     @keyframes holoFlicker {
       0% { opacity: 0.97; transform: translateY(0); }
       50% { opacity: 1; }
@@ -351,6 +372,7 @@
     /* RESPONSIVIDADE */
     @media (max-width: 768px) {
       .holo-container { padding: 25px 20px; }
+      .gov-emblem-img { width: 110px; }
       .main-title { font-size: 2.5rem; letter-spacing: 3px; }
       .article-headline { font-size: 1.35rem; }
       .byline-container { flex-direction: column; gap: 8px; align-items: flex-start; }
@@ -374,12 +396,13 @@
     <div class="spirit-conduit conduit-left"></div>
     <div class="spirit-conduit conduit-right"></div>
 
-    <!-- Cabeçalho Oficial -->
+    <!-- Cabeçalho Oficial com o Símbolo Imperial de Vênus -->
     <header class="main-header">
+      <div class="emblem-wrapper">
+        <img src="simbolo_santo_governo.png" alt="Símbolo do Santo Governo Venusiano" class="gov-emblem-img">
+      </div>
+
       <div class="gov-badge">
-        <svg class="gov-badge-icon" viewBox="0 0 24 24">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
         SANTO GOVERNO DE VÊNUS — TRANSMISSÃO OFICIAL
       </div>
 
@@ -442,7 +465,7 @@
       </p>
 
       <p>
-        No entanto, a gravidade da invasão armada e a destruição do acervo científico do planeta mudaram definitivamente a posture das autoridades. Por decreto extraordinário assinado esta manhã pelo Santo Governo, a dita "Rebelião" foi oficialmente declarada uma Organização Terrorista e Inimiga Pública Número Um do Estado.
+        No entanto, a gravidade da invasão armada e a destruição do acervo científico do planeta mudaram definitivamente a postura das autoridades. Por decreto extraordinário assinado esta manhã pelo Santo Governo, a dita "Rebelião" foi officially declarada uma Organização Terrorista e Inimiga Pública Número Um do Estado.
       </p>
 
       <h3 class="section-title">Caça aos Responsáveis e Estado de Alerta</h3>
