@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A VOZ DE VÊNUS — Edição Oficial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       VARIÁVEIS E CORES ESTÉTICAS (VÊNUS + HOLOGRAMA SANTO GOVERNO)
+       ========================================================================== */
+    :root {
+      --bg-amber: #0c0806;
+      --amber-glow: rgba(255, 140, 0, 0.15);
+      --holo-cyan: #00f3ff;
+      --holo-cyan-glow: rgba(0, 243, 255, 0.4);
+      --holo-gold: #ffd700;
+      --holo-gold-glow: rgba(255, 215, 0, 0.5);
+      --spirit-magenta: #ff0055;
+      --spirit-magenta-glow: rgba(255, 0, 85, 0.4);
+      --glass-bg: rgba(10, 16, 26, 0.75);
+      --glass-border: rgba(0, 243, 255, 0.3);
+      --text-main: #e1f7fc;
+      --text-muted: #8ab4f8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-amber);
+      background-image: 
+        radial-gradient(circle at 50% 10%, rgba(255, 120, 0, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 80% 80%, rgba(176, 38, 255, 0.08) 0%, transparent 50%),
+        linear-gradient(to bottom, #07040a, #0d0914, #050308);
+      color: var(--text-main);
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Fundo de Grade e Efeito de Eletricidade/Scanlines */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: 
+        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+      background-size: 30px 30px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Linhas de Varredura Holográfica */
+    .scanlines {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.25) 50%
+      );
+      background-size: 100% 4px;
+      z-index: 99;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* Feixe de Luz Holográfica Superior */
+    .holo-projection-beam {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 150px;
+      background: linear-gradient(180deg, rgba(0, 243, 255, 0.15) 0%, transparent 100%);
+      clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+      filter: blur(10px);
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       CONTAINER PRINCIPAL DO TERMINAL HOLOGRÁFICO
+       ========================================================================== */
+    .holo-container {
+      position: relative;
+      width: 100%;
+      max-width: 1000px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 4px;
+      box-shadow: 
+        0 0 30px rgba(0, 243, 255, 0.15),
+        0 0 80px rgba(255, 215, 0, 0.08),
+        inset 0 0 25px rgba(0, 243, 255, 0.08);
+      padding: 45px;
+      z-index: 10;
+      animation: holoFlicker 12s infinite alternate;
+    }
+
+    /* Molduras de Cantos Holográficos (Estilo Governamental Chique) */
+    .corner-bracket {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--holo-gold);
+      border-style: solid;
+      pointer-events: none;
+      filter: drop-shadow(0 0 6px var(--holo-gold));
+    }
+    .corner-tl { top: -2px; left: -2px; border-width: 3px 0 0 3px; }
+    .corner-tr { top: -2px; right: -2px; border-width: 3px 3px 0 0; }
+    .corner-bl { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; }
+    .corner-br { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; }
+
+    /* Conduítes Espirituais Laterais */
+    .spirit-conduit {
+      position: absolute;
+      top: 15%;
+      bottom: 15%;
+      width: 3px;
+      background: linear-gradient(180deg, var(--holo-cyan), var(--spirit-magenta), var(--holo-gold));
+      box-shadow: 0 0 12px var(--holo-cyan);
+    }
+    .conduit-left { left: 8px; }
+    .conduit-right { right: 8px; }
+
+    /* ==========================================================================
+       CABEÇALHO OFICIAL DO GOVERNO
+       ========================================================================== */
+    .gov-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 4px;
+      color: var(--holo-gold);
+      text-transform: uppercase;
+      text-shadow: 0 0 8px var(--holo-gold-glow);
+    }
+
+    .gov-badge-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--holo-gold);
+      filter: drop-shadow(0 0 5px var(--holo-gold));
+    }
+
+    .main-header {
+      text-align: center;
+      border-bottom: 2px solid rgba(255, 215, 0, 0.4);
+      padding-bottom: 25px;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .main-title {
+      font-family: 'Cinzel', serif;
+      font-size: 3.8rem;
+      font-weight: 900;
+      letter-spacing: 6px;
+      background: linear-gradient(180deg, #ffffff 0%, var(--holo-gold) 70%, #b8860b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 25px var(--holo-gold-glow);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .header-meta {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      color: var(--holo-cyan);
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 8px var(--holo-cyan-glow);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .meta-mandatory {
+      color: var(--spirit-magenta);
+      font-weight: 700;
+      text-shadow: 0 0 8px var(--spirit-magenta-glow);
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+    }
+
+    /* ==========================================================================
+       MANCHETE E SUBTÍTULO
+       ========================================================================== */
+    .article-headline {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      line-height: 1.3;
+      color: #ffffff;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 30px var(--holo-cyan-glow);
+      margin-bottom: 20px;
+      border-left: 4px solid var(--spirit-magenta);
+      padding-left: 18px;
+    }
+
+    .article-lead {
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: 1.5;
+      color: #cbe9f7;
+      background: rgba(0, 243, 255, 0.05);
+      border: 1px solid rgba(0, 243, 255, 0.2);
+      padding: 18px;
+      border-radius: 4px;
+      margin-bottom: 25px;
+      box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.05);
+    }
+
+    .byline-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-top: 1px dashed rgba(0, 243, 255, 0.3);
+      border-bottom: 1px dashed rgba(0, 243, 255, 0.3);
+      margin-bottom: 35px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      color: var(--holo-gold);
+    }
+
+    /* ==========================================================================
+       CORPO DO TEXTO
+       ========================================================================== */
+    .article-body {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: #e1f7fc;
+      text-align: justify;
+    }
+
+    .article-body p {
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--holo-gold);
+      text-shadow: 0 0 10px var(--holo-gold-glow);
+      margin-top: 35px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::before {
+      content: "◆";
+      font-size: 1rem;
+      color: var(--holo-cyan);
+      text-shadow: 0 0 8px var(--holo-cyan);
+    }
+
+    /* Caixas de Citação Espectral */
+    blockquote {
+      position: relative;
+      background: rgba(255, 215, 0, 0.03);
+      border: 1px solid var(--holo-gold);
+      border-radius: 4px;
+      padding: 25px;
+      margin: 30px 0;
+      font-style: italic;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.1), inset 0 0 15px rgba(255, 215, 0, 0.05);
+    }
+
+    blockquote p {
+      margin-bottom: 0 !important;
+      color: #fff8dc;
+      font-size: 1.15rem;
+    }
+
+    /* Estilização de Termos em Destaque no Texto */
+    strong {
+      color: #ffffff;
+      text-shadow: 0 0 8px var(--holo-cyan-glow);
+    }
+
+    /* Rodapé Holográfico */
+    .holo-footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0, 243, 255, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .footer-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--holo-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--holo-cyan);
+      animation: pulse 2s infinite;
+    }
+
+    /* ==========================================================================
+       ANIMAÇÕES HOLOGRÁFICAS
+       ========================================================================== */
+    @keyframes holoFlicker {
+      0% { opacity: 0.97; transform: translateY(0); }
+      50% { opacity: 1; }
+      52% { opacity: 0.92; }
+      54% { opacity: 1; }
+      80% { opacity: 0.98; }
+      100% { opacity: 0.99; transform: translateY(-1px); }
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { opacity: 0.3; }
+    }
+
+    /* RESPONSIVIDADE */
+    @media (max-width: 768px) {
+      .holo-container { padding: 25px 20px; }
+      .main-title { font-size: 2.5rem; letter-spacing: 3px; }
+      .article-headline { font-size: 1.35rem; }
+      .byline-container { flex-direction: column; gap: 8px; align-items: flex-start; }
+      .article-body { font-size: 1rem; text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scanlines"></div>
+  <div class="holo-projection-beam"></div>
+
+  <main class="holo-container">
+    <!-- Molduras Holográficas de Canto -->
+    <div class="corner-bracket corner-tl"></div>
+    <div class="corner-bracket corner-tr"></div>
+    <div class="corner-bracket corner-bl"></div>
+    <div class="corner-bracket corner-br"></div>
+
+    <!-- Conduítes Laterais de Energia -->
+    <div class="spirit-conduit conduit-left"></div>
+    <div class="spirit-conduit conduit-right"></div>
+
+    <!-- Cabeçalho Oficial -->
+    <header class="main-header">
+      <div class="gov-badge">
+        <svg class="gov-badge-icon" viewBox="0 0 24 24">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        SANTO GOVERNO DE VÊNUS — TRANSMISSÃO OFICIAL
+      </div>
+
+      <h1 class="main-title">A VOZ DE VÊNUS</h1>
+
+      <div class="header-meta">
+        <div>Edição Oficial do Santo Governo — 26 de Junho do A.I. 61 (Edição da Manhã)</div>
+        <div class="meta-mandatory">Distribuição Obrigatória nos Setores Flutuantes e Distritos Verticais</div>
+      </div>
+    </header>
+
+    <!-- Manchete Principal -->
+    <h2 class="article-headline">
+      ATAQUE COVARDE À SANTA BASE 001: EXTREMISTAS SABOTAM SETOR DE ENERGIA ESPIRITUAL E PROVOCAM EXPLOSÃO DA FORTALEZA
+    </h2>
+
+    <!-- Subtítulo / Lead -->
+    <div class="article-lead">
+      O bando de arruaceiros que atende pela alcunha de "A Rebelião" é reclassificado formalmente como Inimigos do Estado após invadir o complexo na madrugada e desencadear um colapso em cadeia para apagar pesquisas históricas.
+    </div>
+
+    <!-- Linha de Autor e Local -->
+    <div class="byline-container">
+      <span>POR J. V. VALERIUS</span>
+      <span>Imprensa Oficial da Capital / Vênus</span>
+    </div>
+
+    <!-- Corpo da Notícia -->
+    <article class="article-body">
+      <p>
+        <strong>CAPITAL FLUTUANTE (26/06/A.I. 61)</strong> — Nas primeiras horas da madrugada desta terça-feira, durante a transição do dia 25 para o dia 26, a ordem e o progresso do nosso planeta sofreram um golpe brutal. A Santa Base 001, baluarte da segurança planetária e coração dos avanços tecnológicos mais vitais da sociedade venuziana, foi completamente destruída em um ato de sabotagem covarde.
+      </p>
+
+      <p>
+        Segundo boletins de emergência emitidos ao amanhecer pelo Ministério da Ordem, a incursão ocorreu sob a cobertura da escuridão. Os criminosos romperam o perímetro da fortaleza e travaram intenso confronto armado contra as honradas tropas da guarda oficial.
+      </p>
+
+      <h3 class="section-title">Sabotagem no Setor de Energia Espiritual</h3>
+
+      <p>
+        Acuados pela reação militar e percebendo a impossibilidade de ocupar a instalação, os invasores avançaram até o Setor de Pesquisas de Energia Espiritual. Em uma manobra deliberada de queima de arquivo — com o objetivo explícito de apagar anos de descobertas científicas que alavancariam a soberania de Vênus —, o grupo forçou a sobrecarga do núcleo de conduítes e das câmaras de contenção espectral.
+      </p>
+
+      <p>
+        A manipulação criminosa da tecnologia espiritual provocou uma reação em cadeia de alta densidade, resultando em um pulso catastrófico que colapsou a estrutura de Santa Base 001 de dentro para fora.
+      </p>
+
+      <p>
+        Em pronunciamento emitido ao nascer do sol, o Porta-Voz do Santo Governo declarou:
+      </p>
+
+      <blockquote>
+        <p>"O que presenciamos na madrugada de hoje não foi um ato de bravura, mas o desespero de heréticos que temem o avanço da nossa sociedade. Ao sabotarem o Setor de Energia Espiritual, esses criminosos não atacaram apenas a infraestrutura militar; tentaram roubar o próprio futuro do povo venuziano."</p>
+      </blockquote>
+
+      <h3 class="section-title">De Arruaceiros Desorganizados a Terroristas de Estado</h3>
+
+      <p>
+        Até o presente ciclo do Ano Imperial 61, os elementos responsáveis por esta tragédia — que tentam romanticamente autodenominar-se no submundo como "A Rebelião" — eram tratados pelas forças policiais como um grupo irrelevante de arruaceiros e marginais, limitados a saques de sucata e pequenos atos de vandalismo nos cortiços flutuantes.
+      </p>
+
+      <p>
+        No entanto, a gravidade da invasão armada e a destruição do acervo científico do planeta mudaram definitivamente a posture das autoridades. Por decreto extraordinário assinado esta manhã pelo Santo Governo, a dita "Rebelião" foi oficialmente declarada uma Organização Terrorista e Inimiga Pública Número Um do Estado.
+      </p>
+
+      <h3 class="section-title">Caça aos Responsáveis e Estado de Alerta</h3>
+
+      <p>
+        As forças de segurança já iniciaram varreduras de ressonância etérea em todas as passarelas suspensas, favelas flutuantes e níveis de manutenção. O Santo Governo adverte rigorosamente: qualquer cidadão que prestar auxílio, abrigo ou demonstrar simpatia aos terroristas será enquadrado imediatamente por cumplicidade e alta traição.
+      </p>
+
+      <p>
+        As operações de buscas continuam intensas ao longo de toda a manhã, e o governo garante que a ordem será restabelecida até que o último terrorista pague por este crime contra Vênus.
+      </p>
+    </article>
+
+    <!-- Rodapé Terminal -->
+    <footer class="holo-footer">
+      <div class="footer-status">
+        <div class="status-dot"></div>
+        <span>SINAL HOLOGRÁFICO CRIPTOGRAFADO — CANAL GOVERNAMENTAL #001</span>
+      </div>
+      <div>REGISTRO IMUTÁVEL DE VÊNUS — A.I. 61</div>
+    </footer>
+  </main>
+
+</body>
+</html>
